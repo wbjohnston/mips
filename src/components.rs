@@ -8,17 +8,25 @@ pub struct Core32
     float_file: FloatRegisterFile32
 }
 
+/// 32-bit MIPS core
+#[allow(dead_code)]
+pub struct Core64
+{
+    file: RegisterFile64,
+    float_file: FloatRegisterFile64
+}
+
 /// A 32-bit register file
 #[allow(dead_code)]
-type RegisterFile32 = RegisterFile<u32>;
+pub type RegisterFile32 = RegisterFile<u32>;
 
 /// A 64-bit register file
 #[allow(dead_code)]
-type RegisterFile64 = RegisterFile<u64>;
+pub type RegisterFile64 = RegisterFile<u64>;
 
 /// A Mips register file
 #[allow(dead_code)]
-struct RegisterFile<T>
+pub struct RegisterFile<T>
 {
     zero: T,
     at: T,
