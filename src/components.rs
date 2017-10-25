@@ -20,15 +20,15 @@ pub struct Core64 {
 
 /// A 32-bit register file
 #[allow(dead_code)]
-pub type RegisterFile32 = RegisterFile<u32>;
+type RegisterFile32 = RegisterFile<u32>;
 
 /// A 64-bit register file
 #[allow(dead_code)]
-pub type RegisterFile64 = RegisterFile<u64>;
+type RegisterFile64 = RegisterFile<u64>;
 
 /// A Mips register file
 #[allow(dead_code)]
-pub struct RegisterFile<T> {
+struct RegisterFile<T> {
     zero: T,
     at: T,
 
@@ -85,15 +85,15 @@ pub struct RegisterFile<T> {
 
 /// A 32-bit floating point register file
 #[allow(dead_code)]
-pub type FloatRegisterFile32 = FloatRegisterFile<f32>;
+type FloatRegisterFile32 = FloatRegisterFile<f32>;
 
 /// A 64-bit floating point register file
 #[allow(dead_code)]
-pub type FloatRegisterFile64 = FloatRegisterFile<f64>;
+type FloatRegisterFile64 = FloatRegisterFile<f64>;
 
 /// Floating point register file
 #[allow(dead_code)]
-pub struct FloatRegisterFile<T> {
+struct FloatRegisterFile<T> {
     // Return value registers
     f0: T,
     f2: T,

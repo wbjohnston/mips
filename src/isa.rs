@@ -1,6 +1,7 @@
 //! Instruction set architecture for MIPS assembly
 
-// TODO(will): Are opcodes consistent across bit-width?
+// TODO(will): Are opcodes consistent across bit-width?  I don't think so... ??
+
 /// A MIPS opcode
 #[repr(u8)]
 #[allow(non_camel_case_types)]
@@ -132,12 +133,12 @@ pub enum RFunction {
 /// | OpCode | Target offset |
 /// |--------|---------------|
 /// | 0001xx | 26 bits       |
-/// |--------|---------------|
+///
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 pub struct JTypeInstruction {
-    opcode: OpCode,
-    offset: u32,
+    pub opcode: OpCode,
+    pub offset: u32,
 }
 
 impl From<u32> for JTypeInstruction {
@@ -152,16 +153,15 @@ impl From<u32> for JTypeInstruction {
 /// | OpCode | Source 1 | Source 2 | Destination | Shift amount | Function |
 /// |--------|----------|----------|-------------|--------------|----------|
 /// | 000000 | 5 bits   | 5 bits   | 5 bits      | 5 bits       | 6 bits   |
-/// |--------|----------|----------|-------------|--------------|----------|
+///
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 pub struct RTypeInstruction {
-    // opcode: u8 // Unused, guarenteed to be `00000`
-    src1: u8,
-    src2: u8,
-    dst: u8,
-    shift: u8,
-    function: RFunction,
+    pub src1: u8,
+    pub src2: u8,
+    pub dst: u8,
+    pub shift: u8,
+    pub function: RFunction,
 }
 
 impl From<u32> for RTypeInstruction {
@@ -176,17 +176,17 @@ impl From<u32> for RTypeInstruction {
 /// | OpCode | Source | Destination | Immediate Value |
 /// |--------|--------|-------------|-----------------|
 /// | 6 bits | 5 bits | 5 bits      | 16 bits         |
-/// |--------|--------|-------------|-----------------|
+///
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
-pub struct ITypeInstruction32 {
-    opcode: OpCode,
-    src: u8,
-    dst: u8,
-    value: u16,
+pub struct ITypeInstruction {
+    pub opcode: OpCode,
+    pub src: u8,
+    pub dst: u8,
+    pub value: u16,
 }
 
-impl From<u32> for ITypeInstruction32 {
+impl From<u32> for ITypeInstruction {
     #[allow(unused_variables)]
     fn from(v: u32) -> Self {
         unimplemented!("32-bit version not implemented yet");
