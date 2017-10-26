@@ -145,7 +145,7 @@ impl From<u32> for Instruction32 {
             }
         }
         // J-type
-        else if opcode_u8 >= 0b00100
+        else if opcode_u8 <= 0b00100
         {
             Instruction32::J {
                 opcode: OpCode::from(opcode_u8),
@@ -174,6 +174,12 @@ mod test
     #[test]
     fn decode_r_instruction()
     {
+        // o = Opcode
+        // 1 = Src 1
+        // 2 = Src 2
+        // d = Destination
+        // s = Shift amount
+        // f = Function code
         //              oooooo1111122222dddddsssssffffff
         let encoded = 0b00000000011001010100101111100000;
 
@@ -185,6 +191,43 @@ mod test
             func: FunctionCode::add
         };
         
+        assert_eq!(expected, Instruction32::from(encoded));
+    }
+
+    #[test]
+    fn decode_j_instruction()
+    {
+        //  o = Opcode
+        //  t = Target offset
+        //              ooooootttttttttttttttttttttttttt
+        let encoded = 0b00001110000000000000000000000001;
+
+        let expected = Instruction32::J {
+            opcode: OpCode::jal,
+            offset: 33554433
+        };
+
+        assert_eq!(expected, Instruction32::from(encoded));
+    }
+
+    #[test]
+    fn decode_i_instruction()
+    {
+    
+        // o = Opcode
+        // s = Source
+        // d = Destination
+        // i = Immediate value
+        //              oooooosssssdddddiiiiiiiiiiiiiiii
+        let encoded = 0b00100001010011111000000000000001;
+        
+        let expected = Instruction32::I {
+            opcode: OpCode::addi,
+            src: 10,
+            dst: 15,
+            imm: 32769
+        };
+
         assert_eq!(expected, Instruction32::from(encoded));
     }
 }
