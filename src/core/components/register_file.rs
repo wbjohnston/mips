@@ -1,34 +1,17 @@
-//! Mips components
-
-/// 32-bit MIPS core
-#[allow(dead_code)]
-pub struct Core32 {
-    pc: u32,
-    ir: u32,
-    file: RegisterFile32,
-    float_file: FloatRegisterFile32,
-}
-
-/// 32-bit MIPS core
-#[allow(dead_code)]
-pub struct Core64 {
-    pc: u64,
-    ir: u64,
-    file: RegisterFile64,
-    float_file: FloatRegisterFile64,
-}
+//! Register files for 32 and 64 bit MIPS architecture
 
 /// A 32-bit register file
 #[allow(dead_code)]
-type RegisterFile32 = RegisterFile<u32>;
+pub type RegisterFile32 = RegisterFile<u32>;
 
 /// A 64-bit register file
 #[allow(dead_code)]
-type RegisterFile64 = RegisterFile<u64>;
+pub type RegisterFile64 = RegisterFile<u64>;
 
 /// A Mips register file
 #[allow(dead_code)]
-struct RegisterFile<T> {
+#[derive(Clone, Copy, Debug)]
+pub struct RegisterFile<T=u32> {
     zero: T,
     at: T,
 
@@ -85,15 +68,16 @@ struct RegisterFile<T> {
 
 /// A 32-bit floating point register file
 #[allow(dead_code)]
-type FloatRegisterFile32 = FloatRegisterFile<f32>;
+pub type FloatRegisterFile32 = FloatRegisterFile<f32>;
 
 /// A 64-bit floating point register file
 #[allow(dead_code)]
-type FloatRegisterFile64 = FloatRegisterFile<f64>;
+pub type FloatRegisterFile64 = FloatRegisterFile<f64>;
 
 /// Floating point register file
 #[allow(dead_code)]
-struct FloatRegisterFile<T> {
+#[derive(Clone, Copy, Debug)]
+pub struct FloatRegisterFile<T=f32> {
     // Return value registers
     f0: T,
     f2: T,
