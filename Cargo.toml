@@ -3,8 +3,16 @@ name = "mips"
 version = "0.0.1"
 authors = ["Will Johnston <wbjohnston@gmail.com>"]
 
+[[bin]]
+name = "assembler"
+path = "src/assembler/main.rs"
+
+[[bin]]
+name = "simulator"
+path = "src/simulator/main.rs"
+
 [lib]
 name = "core"
-path = "src/lib.rs"
+path = "src/core/lib.rs"
 
 [dependencies]
