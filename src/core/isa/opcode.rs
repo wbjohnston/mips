@@ -68,6 +68,7 @@ impl From<u8> for OpCode {
         {
             // addi
             0x08 => addi,
+
             // addiu
             0x09 => addiu,
 

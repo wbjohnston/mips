@@ -62,6 +62,7 @@ pub enum Instruction32 {
 }
 
 impl From<u32> for Instruction32 {
+    #[allow(unused_variables)]
     fn from(v: u32) -> Self
     {
         unimplemented!();

@@ -64,3 +64,54 @@ pub enum FunctionCode {
     /// Subtract (unsigned)
     subu = 0x23,
 }
+
+
+impl From<u8> for FunctionCode
+{
+    #[allow(unused_variables)]
+    fn from(v: u8) -> Self
+    {
+        use self::FunctionCode::*;
+        match v {
+            0x20 => add,
+
+            0x21 => addu,
+
+            0x24 => and,
+
+            0x1A => div,
+
+            0x1B => divu,
+
+            0x10 => mfhi,
+
+            0x12 => mflo,
+
+            0x18 => mult,
+
+            0x19 => multu,
+
+            0x27 => nor,
+
+            0x26 => xor,
+
+            0x25 => or,
+
+            0x2A => slt,
+
+            0x2B => sltu,
+
+            0x00 => sll,
+
+            0x02 => srl,
+
+            0x03 => sra,
+
+            0x22 => sub,
+
+            0x23 => subu,
+            // TODO(will): implement Coprocessor instruction
+            e => panic!("{} is not an opcode.")
+        }
+    }
+}
