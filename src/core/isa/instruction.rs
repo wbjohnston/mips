@@ -5,20 +5,20 @@ use super::{FunctionCode, OpCode};
 /// Fetch function code bits
 fn function_bits(v: &u32) -> u8
 {
-    (0b111111 & v) as u8
+    (0b11_1111 & v) as u8
 }
 
 /// Fetch shift bits
 fn shift_bits(v: &u32) -> u8
 {
-    let mask = 0b11111 << 6;
+    let mask = 0b1_1111 << 6;
     ((v & mask) >> 6) as u8
 }
 
 /// Fetch bits opcode bits
 fn opcode_bits(v: &u32) -> u8
 {
-    let mask = 0b11111 << 26;
+    let mask = 0b1_1111 << 26;
     ((v & mask) >> 26) as u8
 }
 
@@ -26,33 +26,33 @@ fn opcode_bits(v: &u32) -> u8
 fn offset_bits(v: &u32) -> u32
 {
     //  I swear this is 26 bits
-    v & 0b11111111111111111111111111
+    v & 0b11_1111_1111_1111_1111_1111_1111
 }
 
 /// Fetch immediate value bits
 fn immediate_bits(v: &u32) -> u16
 {
-    (v & 0b1111111111111111) as u16
+    (v & 0b1111_1111_1111_1111) as u16
 }
 
 /// Extract source 1 bits
 fn src1_bits(v: &u32) -> u8
 {
-    let mask = 0b11111 << 21;
+    let mask = 0b1_1111 << 21;
     ((v & mask) >> 21) as u8
 }
 
 /// Extract source 2 bits
 fn src2_bits(v: &u32) -> u8
 {
-    let mask = 0b11111 << 16;
+    let mask = 0b1_1111 << 16;
     ((v & mask) >> 16) as u8
 }
 
 /// Extract destination bits
 fn destination_bits(v: &u32) -> u8
 {
-    let mask = 0b11111 << 11;
+    let mask = 0b1_1111 << 11;
     ((v & mask) >> 11) as u8
 }
 
@@ -134,7 +134,7 @@ impl From<u32> for Instruction32 {
         let opcode_u8 = opcode_bits(&v);
 
         // R-type
-        if opcode_u8 == 0b00000
+        if opcode_u8 == 0b0_0000
         {
             Instruction32::R {
                 src1: src1_bits(&v),
@@ -145,7 +145,7 @@ impl From<u32> for Instruction32 {
             }
         }
         // J-type
-        else if opcode_u8 <= 0b00100
+        else if opcode_u8 <= 0b0_0100
         {
             Instruction32::J {
                 opcode: OpCode::from(opcode_u8),
@@ -180,8 +180,8 @@ mod test
         // d = Destination
         // s = Shift amount
         // f = Function code
-        //              oooooo1111122222dddddsssssffffff
-        let encoded = 0b00000000011001010100101111100000;
+        //              oooo oo11 1112 2222 dddd dsss ssff ffff
+        let encoded = 0b0000_0000_0110_0101_0100_1011_1110_0000;
 
         let expected = Instruction32::R {
             src1: 3,
@@ -199,8 +199,8 @@ mod test
     {
         //  o = Opcode
         //  t = Target offset
-        //              ooooootttttttttttttttttttttttttt
-        let encoded = 0b00001110000000000000000000000001;
+        //              oooo oott tttt tttt tttt tttt tttt tttt
+        let encoded = 0b0000_1110_0000_0000_0000_0000_0000_0001;
 
         let expected = Instruction32::J {
             opcode: OpCode::jal,
@@ -218,8 +218,8 @@ mod test
         // s = Source
         // d = Destination
         // i = Immediate value
-        //              oooooosssssdddddiiiiiiiiiiiiiiii
-        let encoded = 0b00100001010011111000000000000001;
+        //              oooo ooss sssd dddd iiii iiii iiii iiii
+        let encoded = 0b0010_0001_0100_1111_1000_0000_0000_0001;
         
         let expected = Instruction32::I {
             opcode: OpCode::addi,
