@@ -3,7 +3,7 @@
 /// R type function code
 #[repr(u8)]
 #[allow(non_camel_case_types)]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum FunctionCode {
     /// Add
     add = 0x20,
@@ -114,4 +114,11 @@ impl From<u8> for FunctionCode {
             e => panic!("{} is not an opcode."),
         }
     }
+}
+
+#[cfg(test)]
+mod test
+{
+
+
 }

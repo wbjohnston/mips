@@ -57,6 +57,7 @@ fn destination_bits(v: &u32) -> u8
 }
 
 /// A 32-bit MIPS instruction
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum Instruction32 {
     /// A Register type instruction
     ///
