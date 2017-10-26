@@ -66,13 +66,13 @@ pub enum FunctionCode {
 }
 
 
-impl From<u8> for FunctionCode
-{
+impl From<u8> for FunctionCode {
     #[allow(unused_variables)]
     fn from(v: u8) -> Self
     {
         use self::FunctionCode::*;
-        match v {
+        match v
+        {
             0x20 => add,
 
             0x21 => addu,
@@ -111,7 +111,7 @@ impl From<u8> for FunctionCode
 
             0x23 => subu,
             // TODO(will): implement Coprocessor instruction
-            e => panic!("{} is not an opcode.")
+            e => panic!("{} is not an opcode."),
         }
     }
 }
