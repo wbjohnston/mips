@@ -129,7 +129,6 @@ pub enum Instruction32 {
 }
 
 impl From<u32> for Instruction32 {
-    #[allow(unused_variables)]
     fn from(v: u32) -> Instruction32
     {
         let opcode_u8 = opcode_bits(&v);
