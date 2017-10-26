@@ -8,4 +8,3 @@ pub use self::instruction::Instruction32;
 
 mod function_code;
 pub use self::function_code::FunctionCode;
-

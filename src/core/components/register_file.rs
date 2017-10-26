@@ -11,7 +11,7 @@ pub type RegisterFile64 = RegisterFile<u64>;
 /// A Mips register file
 #[allow(dead_code)]
 #[derive(Clone, Copy, Debug)]
-pub struct RegisterFile<T=u32> {
+pub struct RegisterFile<T = u32> {
     zero: T,
     at: T,
 
@@ -77,7 +77,7 @@ pub type FloatRegisterFile64 = FloatRegisterFile<f64>;
 /// Floating point register file
 #[allow(dead_code)]
 #[derive(Clone, Copy, Debug)]
-pub struct FloatRegisterFile<T=f32> {
+pub struct FloatRegisterFile<T = f32> {
     // Return value registers
     f0: T,
     f2: T,

@@ -1,4 +1,4 @@
-//! MIPS Function codes (used in R-type instructions when opcode is 0b00000) 
+//! MIPS Function codes (used in R-type instructions when opcode is 0b00000)
 
 /// R type function code
 #[repr(u8)]

@@ -59,13 +59,13 @@ pub enum OpCode {
     jal = 0x03,
 }
 
-impl From<u8> for OpCode
-{
+impl From<u8> for OpCode {
     fn from(v: u8) -> Self
     {
         use self::OpCode::*;
 
-        match v {
+        match v
+        {
             // addi
             0x08 => addi,
             // addiu
@@ -112,7 +112,7 @@ impl From<u8> for OpCode
             // jal
             0x03 => jal,
 
-            e => panic!("{} is not a valid opcode", e)
+            e => panic!("{} is not a valid opcode", e),
         }
     }
 }
