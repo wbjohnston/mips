@@ -119,8 +119,7 @@ impl From<u8> for OpCode {
 }
 
 #[cfg(test)]
-mod test
-{
+mod test {
     use super::*;
 
     #[test]

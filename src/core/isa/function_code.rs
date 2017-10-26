@@ -67,7 +67,6 @@ pub enum FunctionCode {
 
 
 impl From<u8> for FunctionCode {
-    #[allow(unused_variables)]
     fn from(v: u8) -> Self
     {
         use self::FunctionCode::*;
@@ -111,14 +110,124 @@ impl From<u8> for FunctionCode {
 
             0x23 => subu,
             // TODO(will): implement Coprocessor instruction
-            e => panic!("{} is not an opcode."),
+            e => panic!("{} is not an opcode.", e),
         }
     }
 }
 
 #[cfg(test)]
-mod test
-{
+mod test {
+    use super::*;
 
+    #[test]
+    fn decode_add()
+    {
+        let encoded = 0x20;
+        assert_eq!(FunctionCode::add, FunctionCode::from(encoded));
+    }
 
+    #[test]
+    fn decode_addu()
+    {
+        let encoded = 0x21;
+        assert_eq!(FunctionCode::addu, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_and()
+    {
+        let encoded = 0x24;
+        assert_eq!(FunctionCode::and, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_div()
+    {
+        let encoded = 0x1A;
+        assert_eq!(FunctionCode::div, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_divu()
+    {
+        let encoded = 0x1B;
+        assert_eq!(FunctionCode::divu, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_mfhi()
+    {
+        let encoded = 0x10;
+        assert_eq!(FunctionCode::mfhi, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_mflo()
+    {
+        let encoded = 0x12;
+        assert_eq!(FunctionCode::mflo, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_nor()
+    {
+        let encoded = 0x27;
+        assert_eq!(FunctionCode::nor, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_xor()
+    {
+        let encoded = 0x26;
+        assert_eq!(FunctionCode::xor, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_or()
+    {
+        let encoded = 0x25;
+        assert_eq!(FunctionCode::or, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_slt()
+    {
+        let encoded = 0x2A;
+        assert_eq!(FunctionCode::slt, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_sltu()
+    {
+        let encoded = 0x2B;
+        assert_eq!(FunctionCode::sltu, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_sll()
+    {
+        let encoded = 0x00;
+        assert_eq!(FunctionCode::sll, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_sra()
+    {
+        let encoded = 0x02;
+        assert_eq!(FunctionCode::srl, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_sub()
+    {
+        let encoded = 0x22;
+        assert_eq!(FunctionCode::sub, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_subu()
+    {
+        let encoded = 0x23;
+        assert_eq!(FunctionCode::subu, FunctionCode::from(encoded));
+    }
 }
