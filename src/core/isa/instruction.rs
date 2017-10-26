@@ -5,7 +5,7 @@ use super::{FunctionCode, OpCode};
 /// Fetch function code bits
 fn function_bits(v: &u32) -> u8
 {
-    (0b11111 & v) as u8
+    (0b111111 & v) as u8
 }
 
 /// Fetch shift bits
@@ -162,5 +162,29 @@ impl From<u32> for Instruction32 {
                 imm: immediate_bits(&v),
             }
         }
+    }
+}
+
+
+#[cfg(test)]
+mod test
+{
+    use super::*;
+
+    #[test]
+    fn decode_r_instruction()
+    {
+        //              oooooo1111122222dddddsssssffffff
+        let encoded = 0b00000000011001010100101111100000;
+
+        let expected = Instruction32::R {
+            src1: 3,
+            src2: 5,
+            dst: 9,
+            shift: 15,
+            func: FunctionCode::add
+        };
+        
+        assert_eq!(expected, Instruction32::from(encoded));
     }
 }
