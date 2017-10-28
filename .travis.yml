@@ -25,12 +25,14 @@ addons:
 
 after_success:
   - | # Upload docs to github pages
-      cargo doc && \
-      export REPO_NAME="$(echo $TRAVIS_REPO_SLUG | sed 's/.*\///')" && \
-      echo "<meta http-equiv=refresh content=0;url=${REPO_NAME}/index.html>" > target/doc/index.html && \
-      sudo pip install ghp-import && \
-      ghp-import -n target/doc && \
-      git push -qf https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+      if [[ "$TRAVIS_RUST_VERSION" == "stable" && "$TRAVIS_PULL_REQUEST" == "false" && "$TRAVIS_BRANCH" == "master" ]]; then
+        cargo doc && \
+        export REPO_NAME="$(echo $TRAVIS_REPO_SLUG | sed 's/.*\///')" && \
+        echo "<meta http-equiv=refresh content=0;url=${REPO_NAME}/index.html>" > target/doc/index.html && \
+        sudo pip install ghp-import && \
+        ghp-import -n target/doc && \
+        git push -qf https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+      fi
 
   - | # Upload code coverage to codecov
       wget https://github.com/SimonKagstrom/kcov/archive/master.tar.gz && \
