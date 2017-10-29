@@ -169,6 +169,20 @@ mod test {
     }
 
     #[test]
+    fn decode_mult()
+    {
+        let encoded = 0x018;
+        assert_eq!(FunctionCode::mult, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_multu()
+    {
+        let encoded = 0x019;
+        assert_eq!(FunctionCode::multu, FunctionCode::from(encoded));
+    }
+
+    #[test]
     fn decode_nor()
     {
         let encoded = 0x27;
@@ -211,10 +225,17 @@ mod test {
     }
 
     #[test]
-    fn decode_sra()
+    fn decode_srl()
     {
         let encoded = 0x02;
         assert_eq!(FunctionCode::srl, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    fn decode_sra()
+    {
+        let encoded = 0x03;
+        assert_eq!(FunctionCode::sra, FunctionCode::from(encoded));
     }
 
     #[test]
@@ -229,5 +250,13 @@ mod test {
     {
         let encoded = 0x23;
         assert_eq!(FunctionCode::subu, FunctionCode::from(encoded));
+    }
+
+    #[test]
+    #[should_panic]
+    fn decode_invalid()
+    {
+        let encoded = 0x28;
+        FunctionCode::from(encoded);
     }
 }
