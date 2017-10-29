@@ -24,16 +24,10 @@ before_script:
         pip install 'travis-cargo<0.2' --user &&
         export PATH=$HOME/.local/bin:$PATH
 
-script:
-  - |
-      travis-cargo build &&
-      travis-cargo test &&
-      travis-cargo bench &&
-      travis-cargo --only stable doc
-
 after_success:
-  # Upload docs
+  # Upload docs to github pages
   - travis-cargo --only stable doc-upload
-  # Upload to coveralls
-  - travis-cargo coveralls --no-sudo --verify
+  # Upload to Codecov
+  - travis-cargo coveralls --no-sudo --verify 
+    && bash <(curl -s https://codecov.io/bash)
 
