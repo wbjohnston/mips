@@ -17,3 +17,4 @@ path = "src/core/lib.rs"
 
 [dependencies]
 num-traits = "0.1.40"
+byteorder = "1"

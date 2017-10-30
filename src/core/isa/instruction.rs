@@ -122,10 +122,10 @@ pub enum Instruction32 {
         offset: u32,
     },
 
-    /// A Coprocessor instruction
-    C {
+    // /// A Coprocessor instruction
+    // C {
         // TODO(will): c-type instruction fields
-    },
+    // },
 }
 
 impl From<u32> for Instruction32 {

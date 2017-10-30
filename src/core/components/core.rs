@@ -1,5 +1,7 @@
 //! MIPS processors
 
+use std::mem;
+
 // NOTE(will): MIPS user memory is below 0x7fff_ffff
 // NOTE(will): Program text starts at 0x0040_0000
 // NOTE(will): data storage always starts at 0x1001_0000
@@ -12,9 +14,8 @@
 
 // use num_traits::{Unsigned, PrimInt};
 
-use super::{RegisterFile};
-
-use isa::Instruction32;
+use super::RegisterFile;
+use isa::{Instruction32, FunctionCode, OpCode};
 
 /// 32-bit MIPS `Core`
 pub type Core32 = Core<u32>;
@@ -23,7 +24,7 @@ pub type Core32 = Core<u32>;
 pub type Core64 = Core<u64>;
 
 // TODO(will): pass in a type parameter for "endianess"
-/// 32-bit MIPS core
+/// A MIPS core
 #[derive(Clone, Debug, PartialEq)]
 pub struct Core<WordType=u32> 
 where
@@ -33,6 +34,10 @@ where
 
     ir: WordType,
 
+    hi: WordType,
+
+    lo: WordType,
+
     registers: RegisterFile<WordType>,
 
     float_registers: RegisterFile<WordType>,
@@ -41,11 +46,27 @@ where
 
     halted: bool,
 
-    overflow_flag: bool
+    overflow_flag: bool,
 }
 
 impl Core<u32>
 {
+    /// Create a new core with a specified memory size
+    pub fn with_memory_size(size: usize) -> Self
+    {
+        Self {
+            pc: 0, // Where is initial pc
+            ir: 0,
+            hi: 0,
+            lo: 0,
+            registers: RegisterFile::new(),
+            float_registers: RegisterFile::new(),
+            memory: vec![0; size],
+            halted: false,
+            overflow_flag: false
+        }
+    }
+
     /// Step the processor one cycle
     pub fn step(&mut self)
     {
@@ -64,6 +85,96 @@ impl Core<u32>
         // Execute phase
         //////////////////////////
         // TODO(will): Write execute phase
+        match decoded {
+            Instruction32::R{src1, src2, dst, shift, func} => {
+                use self::FunctionCode::*;
+                let o1 = self.registers.fetch_by_idx(src1);
+                let o2 = self.registers.fetch_by_idx(src2);
+
+                match func {
+                    add => self.registers.store_by_idx(
+                        dst,
+                        unsafe { mem::transmute_copy::<i32, u32>(
+                            &(mem::transmute_copy::<u32, i32>(&o1) + 
+                              mem::transmute_copy::<u32, i32>(&o2))
+                        )}
+                    ),
+                    addu => self.registers.store_by_idx(dst, o1 + o2),
+                    and => self.registers.store_by_idx(dst, o1 & o2),
+                    div => self.registers.store_by_idx(
+                        dst,
+                        unsafe { mem::transmute_copy::<i32, u32>(
+                            &(mem::transmute_copy::<u32, i32>(&o1) /
+                              mem::transmute_copy::<u32, i32>(&o2))
+                        )}
+                    ),
+                    divu => self.registers.store_by_idx(dst, o1 / o2),
+                    mfhi => unimplemented!(),
+                    mflo => unimplemented!(),
+                    mult => unimplemented!(),
+                    multu => self.registers.store_by_idx(dst, o1 * o2),
+                    nor => self.registers.store_by_idx(dst, !(o1 | o2)),
+                    or => self.registers.store_by_idx(dst, o1 | o2),
+                    sll => self.registers.store_by_idx(dst, o1 << shift),
+                    slt => unimplemented!(),
+                    sltu => self.registers.store_by_idx(
+                        dst,
+                        if o1 < o2 { 1 } else { 0 }
+                    ),
+                    sra => unimplemented!(),
+                    srl => unimplemented!(),
+                    sub => unimplemented!(),
+                    subu => self.registers.store_by_idx(dst, o1 - o2),
+                    xor => self.registers.store_by_idx(dst, o1 ^ o2),
+                }
+            }
+            Instruction32::J{opcode, offset} => {
+                use self::OpCode::*;
+                match opcode {
+                    j => self.pc += offset,
+                    jal => {
+                        self.registers.store_by_idx(31, self.pc);
+                        self.pc += offset;
+                    },
+                    _ => unreachable!()
+                }
+            }
+            Instruction32::I{opcode, src, dst, imm} => {
+                use self::OpCode::*;
+                let operand = self.registers.fetch_by_idx(src);
+                match opcode {
+                    addi => unimplemented!(), 
+                    addiu => self.registers.store_by_idx(
+                        dst,
+                        operand + imm as u32
+                    ),
+                    andi => self.registers.store_by_idx(
+                        dst,
+                        operand & imm as u32
+                    ), 
+                    beq => {
+                        if src == 1 {
+                            self.pc += imm as u32;
+                        }
+                    }, 
+                    bne => unimplemented!(), 
+                    ori => self.registers.store_by_idx(dst, operand | imm as u32), 
+                    slti => self.registers.store_by_idx(
+                        dst,
+                        if operand < imm as u32 { 1 } else { 0 }
+                    ), 
+                    /* Memory access instructions */
+                    lbu => { /* Fulfilled in MEM phase */ }, 
+                    lhu => { /* Fulfilled in MEM phase */ }, 
+                    lui => { /* Fulfilled in MEM phase */ }, 
+                    lw => { /* Fulfilled in MEM phase */ }, 
+                    sb => { /* Fulfilled in MEM phase */ }, 
+                    sh => { /* Fulfilled in MEM phase*/ }, 
+                    sw => { /* Fulfilled in MEM phase */ }, 
+                    _ => unreachable!()
+                }
+            }
+        }
 
         //////////////////////////
         // Memory access phase
@@ -73,12 +184,12 @@ impl Core<u32>
             Instruction32::R{..} => {}
             Instruction32::J{..} => {}
             Instruction32::I{..} => {}
-            _ => {}
         }
 
         //////////////////////////
         // Writeback phase
         //////////////////////////
+        // TODO(will): implement writeback phase
     }
 
     /// Get a copy of the program counter
@@ -94,13 +205,13 @@ impl Core<u32>
     }
 
     /// Get a copy of the Processor's `RegisterFile`
-    pub fn register_file(&self) -> RegisterFile<u32>
+    pub fn register(&self) -> RegisterFile<u32>
     {
         self.registers
     }
 
     /// Get a copy of the Processor's float `RegisterFile`
-    pub fn float_register_file(&self) -> RegisterFile<u32>
+    pub fn float_registers(&self) -> RegisterFile<u32>
     {
         self.float_registers
     }
@@ -121,6 +232,12 @@ impl Core<u32>
     pub fn halt(&mut self)
     {
         self.halted  = true;
+    }
+
+    /// Reset the `Core`
+    pub fn reset(&mut self)
+    {
+        unimplemented!();
     }
 
     /// Is the overflow flag set
