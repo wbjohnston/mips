@@ -1,23 +1,14 @@
 # MIPS Assembler and Simulator
 A MIPS processor architecture simulator and assembler.
 
+Please read the [documentation](https://wbjohnston.github.io/mips).
+
 **Note:** This project is current a work in progress, many things are not 
 currently implemented.
 
-![Travis CI](https://travis-ci.org/wbjohnston/mips.svg?branch=master)
+[![Travis CI](https://travis-ci.org/wbjohnston/mips.svg?branch=master)](https://travis-ci.org/wbjohnston/mips)
 [![codecov](https://codecov.io/gh/wbjohnston/mips/branch/master/graph/badge.svg)](https://codecov.io/gh/wbjohnston/mips)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-## Usage
-### Assembler
-```
-cargo run --bin assembler
-```
-
-### Simulator
-```
-cargo run --bin simulator
-```
 
 ## License
 Dual-licensed to be compatible with the Rust project.
