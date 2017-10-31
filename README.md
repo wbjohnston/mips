@@ -5,6 +5,7 @@ A MIPS processor architecture simulator and assembler.
 currently implemented.
 
 ![Travis CI](https://travis-ci.org/wbjohnston/mips.svg?branch=master)
+[![codecov](https://codecov.io/gh/wbjohnston/mips/branch/master/graph/badge.svg)](https://codecov.io/gh/wbjohnston/mips)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Usage
