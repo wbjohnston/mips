@@ -46,7 +46,9 @@ where
 
     halted: bool,
 
-    overflow_flag: bool,
+    status: WordType,
+
+    cause: WordType
 }
 
 impl Core<u32>
@@ -63,10 +65,12 @@ impl Core<u32>
             float_registers: RegisterFile::new(),
             memory: vec![0; size],
             halted: false,
-            overflow_flag: false
+            status: 0,
+            cause: 0
         }
     }
 
+    // TODO(will): multi cycle instruction implementation
     /// Step the processor one cycle
     pub fn step(&mut self)
     {
@@ -181,9 +185,9 @@ impl Core<u32>
         //////////////////////////
         // TODO(will): Memory access phase
         match decoded {
-            Instruction32::R{..} => {}
-            Instruction32::J{..} => {}
-            Instruction32::I{..} => {}
+            Instruction32::R{..} => unimplemented!(), 
+            Instruction32::J{..} => unimplemented!(),
+            Instruction32::I{..} => unimplemented!(),
         }
 
         //////////////////////////
@@ -243,6 +247,6 @@ impl Core<u32>
     /// Is the overflow flag set
     pub fn overflow(&self) -> bool
     {
-        self.overflow_flag
+        (self.status & (1 << 4)) != 0
     }
 }
